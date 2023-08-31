@@ -1,9 +1,12 @@
-import requests
+#client
+import asyncio
+import websockets
 
-url = "http://143.110.242.113:5001/api/messages"  # Replace with your server's URL
-data = {"message": "Hello ME"}
-response = requests.post(url, json=data)
-response_data = response.json()  # Parse the JSON response
+async def client():
+    async with websockets.connect("ws://139.59.28.124:9000") as websocket:
+        message = await websocket.recv()
+        print(f"Received message from server: {message}")
+        reply = "Hello from the client!"
+        await websocket.send(reply)
 
-# Print the server response message
-print("Server Response:", response_data.get("response_message", "No response"))
+asyncio.get_event_loop().run_until_complete(client())
